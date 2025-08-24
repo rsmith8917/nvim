@@ -1,11 +1,11 @@
 -- ==============================
---   Basic Neovim Configuration
+--   Basic Configuration
 -- ==============================
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- General options
+-- Editor options
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.tabstop = 4
@@ -13,9 +13,9 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.termguicolors = true
 vim.opt.cursorline = true
-vim.opt.clipboard = "unnamedplus" -- use the system clipboard
+vim.opt.clipboard = "unnamedplus"
 
--- Disable netrw
+-- Disable netrw (using Neo-tree instead)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
@@ -23,13 +23,12 @@ vim.g.loaded_netrwPlugin = 1
 vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function()
         vim.highlight.on_yank {
-            higroup = "Search", -- highlight group to use
-            timeout = 300,      -- time in ms before it fades
+            higroup = "Search",
+            timeout = 300,
         }
     end,
 })
 
--- Keymaps will be set up after plugins are loaded
 
 
 -- ==============================
@@ -53,13 +52,12 @@ vim.opt.rtp:prepend(lazypath)
 -- ==============================
 require("lazy").setup({
 
-    -- Treesitter: syntax highlighting & indentation
+    -- Treesitter
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         config = function()
             require("nvim-treesitter.configs").setup({
-                -- Install these parsers automatically
                 ensure_installed = {
                     "go",
                     "lua",
@@ -74,8 +72,8 @@ require("lazy").setup({
                     "yaml",
                     "markdown",
                 },
-                sync_install = false, -- install in background
-                auto_install = true,  -- auto-install missing parsers when opening a file
+                sync_install = false,
+                auto_install = true,
 
                 highlight = { enable = true },
                 indent = { enable = true },
@@ -83,13 +81,12 @@ require("lazy").setup({
         end,
     },
 
-    -- Telescope: fuzzy finder
+    -- Telescope
     {
         "nvim-telescope/telescope.nvim",
         branch = "0.1.x",
         dependencies = {
             "nvim-lua/plenary.nvim",
-            -- Fast native sorter
             { "nvim-telescope/telescope-fzf-native.nvim", build = "make", cond = vim.fn.executable("make") == 1 },
         },
         cmd = "Telescope",
@@ -99,12 +96,12 @@ require("lazy").setup({
 
             telescope.setup({
                 defaults = {
-                    -- Keep noisy dirs out by default (still overridable with the ALL mappings)
+                    -- Default ignore patterns
                     file_ignore_patterns = {
                         "%.git/", "node_modules/", "dist/", "build/", "coverage/", "target/",
                         "bin/", "obj/", "%.venv/", "venv/", "%.cache/", "android/", "ios/", "Pods/",
                     },
-                    -- Ripgrep args for live_grep/grep_string
+                    -- Ripgrep configuration
                     vimgrep_arguments = {
                         "rg",
                         "--color=never",
@@ -113,8 +110,7 @@ require("lazy").setup({
                         "--line-number",
                         "--column",
                         "--smart-case",
-                        "--hidden", -- allow hidden files… (still filtered by file_ignore_patterns and .gitignore)
-                        -- (we DO NOT pass --no-ignore here so defaults respect .gitignore)
+                        "--hidden",
                     },
                     path_display = { "truncate" },
                     mappings = {
@@ -125,14 +121,14 @@ require("lazy").setup({
                     },
                 },
                 pickers = {
-                    -- Sensible defaults; “ALL” mappings override these per-call
+                    -- Default picker settings
                     find_files = {
                         hidden = false,
                         no_ignore = false,
-                        follow = true, -- follow symlinks
+                        follow = true,
                     },
                     live_grep = {
-                        -- Extra safety filters for default grep to avoid heavy trees
+                        -- Additional grep filters
                         additional_args = function(_)
                             return {
                                 "--hidden",
@@ -152,13 +148,13 @@ require("lazy").setup({
         end,
     },
 
-    -- Spectre: Project-wide Search/Replace
+    -- Spectre
     {
         "nvim-pack/nvim-spectre",
         dependencies = { "nvim-lua/plenary.nvim" },
     },
 
-    -- Lualine: statusline
+    -- Lualine
     {
         "nvim-lualine/lualine.nvim",
         dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -171,7 +167,7 @@ require("lazy").setup({
         end,
     },
 
-    -- LSP Config
+    -- LSP
     {
         "neovim/nvim-lspconfig",
         config = function()
@@ -203,7 +199,7 @@ require("lazy").setup({
         end,
     },
 
-    -- Autocompletion
+    -- Completion
     {
         "hrsh7th/nvim-cmp",
         dependencies = {
@@ -255,7 +251,7 @@ require("lazy").setup({
         end,
     },
 
-    -- Conform (auto formatting)
+    -- Formatting
     {
         "stevearc/conform.nvim",
         config = function()
@@ -267,8 +263,8 @@ require("lazy").setup({
                     lua = { "stylua" },
                     javascript = { "prettier" },
                     typescript = { "prettier" },
-                    javascriptreact = { "prettier" }, -- JSX
-                    typescriptreact = { "prettier" }, -- TSX
+                    javascriptreact = { "prettier" },
+                    typescriptreact = { "prettier" },
                     python = { "black" },
                     json = { "prettier" },
                     css = { "prettier" },
@@ -287,17 +283,16 @@ require("lazy").setup({
         end,
     },
 
-    -- Buffer and Window closing
+    -- Buffer Management
     {
         "echasnovski/mini.bufremove",
         version = false,
         event = "VeryLazy",
         config = function()
-            -- Sensible options so you can close/switch freely
-            vim.opt.confirm = true -- prompt to save on close
-            vim.opt.hidden = true  -- allow modified buffers in background
+            vim.opt.confirm = true
+            vim.opt.hidden = true
 
-            -- Safe window closer: never exit Neovim unless you explicitly :qa!
+            -- Safe window close function
             local function safe_close_window()
                 local only_tab = #vim.api.nvim_list_tabpages() == 1
                 local only_win = #vim.api.nvim_list_wins() == 1
@@ -305,18 +300,17 @@ require("lazy").setup({
                     vim.cmd("close")
                     return
                 end
-                -- Last window of last tab → create a scratch buffer instead of quitting
+                -- Create scratch buffer instead of quitting
                 local newbuf = vim.api.nvim_create_buf(true, false)
                 vim.api.nvim_set_current_buf(newbuf)
-                vim.bo[newbuf].buftype = "" -- normal buffer
+                vim.bo[newbuf].buftype = ""
                 vim.bo[newbuf].bufhidden = "hide"
                 vim.bo[newbuf].swapfile = false
                 vim.api.nvim_buf_set_lines(newbuf, 0, -1, false, { "" })
             end
 
-            -- Keymaps moved to consolidated section at end of file
 
-            -- Make `q` close helper/utility windows
+            -- Auto-close utility windows with 'q'
             vim.api.nvim_create_autocmd("FileType", {
                 pattern = {
                     "help", "man", "qf", "lspinfo", "checkhealth", "startuptime",
@@ -327,7 +321,7 @@ require("lazy").setup({
                 end,
             })
 
-            -- Optional: a :Q that behaves like our safe window close
+            -- Create :Q command
             vim.api.nvim_create_user_command("Q", safe_close_window, {})
         end,
     },
@@ -360,7 +354,7 @@ require("lazy").setup({
         end,
     },
 
-    -- Neo-tree: File Explorer
+    -- Neo-tree
     {
         "nvim-neo-tree/neo-tree.nvim",
         branch = "v3.x",
@@ -393,7 +387,6 @@ require("lazy").setup({
         cmd = "LazyGit",
         dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
-            -- optional: always open in a floating window
             vim.g.lazygit_floating_window_use_plenary = 1
         end,
     }
@@ -403,14 +396,14 @@ require("lazy").setup({
 --   Keymaps
 -- ==============================
 
--- Core editor keymaps
+-- Core
 vim.keymap.set("n", "<leader>s", ":w<CR>", { desc = "Save file" })
 
--- Buffer navigation
+-- Buffers
 vim.keymap.set("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", { desc = "Previous buffer" })
 
--- Window splits and navigation
+-- Windows
 vim.keymap.set("n", "<leader>\\", "<C-w>v", { desc = "Split window vertically" })
 vim.keymap.set("n", "<leader>-", "<C-w>s", { desc = "Split window horizontally" })
 vim.keymap.set("n", "<leader>h", "<C-w>h", { desc = "Focus left window" })
@@ -418,7 +411,7 @@ vim.keymap.set("n", "<leader>l", "<C-w>l", { desc = "Focus right window" })
 vim.keymap.set("n", "<leader>j", "<C-w>j", { desc = "Focus below window" })
 vim.keymap.set("n", "<leader>k", "<C-w>k", { desc = "Focus above window" })
 
--- LSP keymaps
+-- LSP
 vim.keymap.set("n", "gh", vim.diagnostic.open_float, { desc = "Show diagnostics" })
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Find references" })
@@ -432,13 +425,13 @@ vim.keymap.set("n", "<leader>F", function()
     require("conform").format({ async = true, lsp_fallback = true })
 end, { desc = "Format buffer" })
 
--- Telescope: file finding and search
+-- Telescope
 vim.keymap.set("n", "<leader>ff", function() require("telescope.builtin").find_files() end, { desc = "Find files" })
 vim.keymap.set("n", "<leader>fg", function() require("telescope.builtin").live_grep() end, { desc = "Live grep" })
 vim.keymap.set("n", "<leader>fb", function() require("telescope.builtin").buffers() end, { desc = "Find buffers" })
 vim.keymap.set("n", "<leader>fh", function() require("telescope.builtin").help_tags() end, { desc = "Help tags" })
 
--- Telescope: search everything (overrides ignore)
+-- Telescope (all files)
 vim.keymap.set("n", "<leader>fF", function()
     require("telescope.builtin").find_files({ hidden = true, no_ignore = true, follow = true })
 end, { desc = "Find files (ALL)" })
@@ -448,14 +441,14 @@ vim.keymap.set("n", "<leader>fG", function()
     })
 end, { desc = "Live grep (ALL)" })
 
--- Spectre: search and replace
+-- Spectre
 vim.keymap.set("n", "<leader>sr", function() require("spectre").toggle() end, { desc = "Search & Replace" })
 vim.keymap.set("n", "<leader>sw", function() require("spectre").open_visual({ select_word = true }) end,
     { desc = "Search current word" })
 vim.keymap.set("n", "<leader>sf", function() require("spectre").open_file_search() end,
     { desc = "Search in current file" })
 
--- Neo-tree: file explorer
+-- Neo-tree
 vim.keymap.set("n", "<leader>e", function()
     require("neo-tree.command").execute({
         source = "filesystem",
@@ -464,10 +457,10 @@ vim.keymap.set("n", "<leader>e", function()
     })
 end, { desc = "Toggle Neo-tree" })
 
--- LazyGit: git interface
+-- Git
 vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<cr>", { desc = "Open Lazygit" })
 
--- Buffer management (mini.bufremove keymaps from plugin config)
+-- Buffer management
 vim.keymap.set("n", "<leader>w", function()
     local only_tab = #vim.api.nvim_list_tabpages() == 1
     local only_win = #vim.api.nvim_list_wins() == 1
@@ -475,7 +468,7 @@ vim.keymap.set("n", "<leader>w", function()
         vim.cmd("close")
         return
     end
-    -- Last window of last tab → create a scratch buffer instead of quitting
+    -- Create scratch buffer instead of quitting
     local newbuf = vim.api.nvim_create_buf(true, false)
     vim.api.nvim_set_current_buf(newbuf)
     vim.bo[newbuf].buftype = ""
