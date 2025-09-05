@@ -459,6 +459,33 @@ require("lazy").setup({
                 },
             })
         end,
+    },
+
+    -- Code folding
+    {
+        "kevinhwang91/nvim-ufo",
+        dependencies = { "kevinhwang91/promise-async" },
+        event = { "BufReadPost", "BufNewFile" },
+        config = function()
+            -- Set folding options
+            vim.o.foldcolumn = '1'
+            vim.o.foldlevel = 99
+            vim.o.foldlevelstart = 99
+            vim.o.foldenable = true
+            vim.o.fillchars = [[eob: ,fold: ,foldopen:▾,foldsep: ,foldclose:▸]]
+
+            require('ufo').setup({
+                provider_selector = function(bufnr, filetype, buftype)
+                    return { 'treesitter', 'indent' }
+                end,
+                preview = {
+                    win_config = {
+                        border = 'rounded',
+                        winblend = 0,
+                    },
+                },
+            })
+        end,
     }
 })
 
@@ -527,7 +554,21 @@ vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<cr>", { desc = "Open Lazygit" })
 
 -- Illuminate navigation
 vim.keymap.set("n", "<C-n>", function() require("illuminate").goto_next_reference(false) end, { desc = "Next reference" })
-vim.keymap.set("n", "<C-p>", function() require("illuminate").goto_prev_reference(false) end, { desc = "Previous reference" })
+vim.keymap.set("n", "<C-p>", function() require("illuminate").goto_prev_reference(false) end,
+    { desc = "Previous reference" })
+
+-- Folding
+vim.keymap.set("n", "-", "za", { desc = "Toggle fold" })
+vim.keymap.set("n", "zo", "zO", { desc = "Open fold recursively" })
+vim.keymap.set("n", "zc", "zC", { desc = "Close fold recursively" })
+vim.keymap.set("n", "zO", function() require("ufo").openAllFolds() end, { desc = "Open ALL folds in file" })
+vim.keymap.set("n", "zC", function() require("ufo").closeAllFolds() end, { desc = "Close ALL folds in file" })
+vim.keymap.set("n", "K", function()
+    local winid = require('ufo').peekFoldedLinesUnderCursor()
+    if not winid then
+        vim.lsp.buf.hover()
+    end
+end, { desc = "Peek fold or hover" })
 
 -- Buffer management
 vim.keymap.set("n", "<leader>w", function()
