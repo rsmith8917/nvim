@@ -157,11 +157,6 @@ require("lazy").setup({
         end,
     },
 
-    -- Spectre
-    {
-        "nvim-pack/nvim-spectre",
-        dependencies = { "nvim-lua/plenary.nvim" },
-    },
 
     -- Lualine
     {
@@ -473,6 +468,7 @@ require("lazy").setup({
 
 -- Core
 vim.keymap.set("n", "<leader>s", ":w<CR>", { desc = "Save file" })
+vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { desc = "Clear search highlight" })
 
 -- Buffers
 vim.keymap.set("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer" })
@@ -516,13 +512,6 @@ vim.keymap.set("n", "<leader>fG", function()
         additional_args = function(_) return { "--hidden", "--no-ignore" } end,
     })
 end, { desc = "Live grep (ALL)" })
-
--- Spectre
-vim.keymap.set("n", "<leader>sr", function() require("spectre").toggle() end, { desc = "Search & Replace" })
-vim.keymap.set("n", "<leader>sw", function() require("spectre").open_visual({ select_word = true }) end,
-    { desc = "Search current word" })
-vim.keymap.set("n", "<leader>sf", function() require("spectre").open_file_search() end,
-    { desc = "Search in current file" })
 
 -- Neo-tree
 vim.keymap.set("n", "<leader>e", function()
