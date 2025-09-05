@@ -398,6 +398,72 @@ require("lazy").setup({
         config = function()
             vim.g.lazygit_floating_window_use_plenary = 1
         end,
+    },
+
+    -- Highlight references under cursor
+    {
+        "RRethy/vim-illuminate",
+        event = { "BufReadPost", "BufNewFile" },
+        config = function()
+            require("illuminate").configure({
+                delay = 200,
+                large_file_cutoff = 2000,
+                large_file_overrides = {
+                    providers = { "lsp" },
+                },
+                providers = {
+                    'lsp',
+                    'treesitter',
+                    'regex',
+                },
+                filetypes_denylist = {
+                    'dirvish',
+                    'fugitive',
+                    'neo-tree',
+                    'alpha',
+                    'NvimTree',
+                    'packer',
+                    'lazy',
+                    'TelescopePrompt',
+                },
+                under_cursor = true,
+                min_count_to_highlight = 2,
+            })
+        end,
+    },
+
+    -- Simple scrollbar with diagnostic indicators
+    {
+        "petertriho/nvim-scrollbar",
+        event = { "BufReadPost", "BufNewFile" },
+        config = function()
+            require("scrollbar").setup({
+                show_in_active_only = false,
+                hide_if_all_visible = true,
+                throttle_ms = 100,
+                handle = {
+                    color = "#51576d",
+                },
+                marks = {
+                    Search = { color = "#f9e2af" },
+                    Error = { color = "#f38ba8" },
+                    Warn = { color = "#fab387" },
+                    Info = { color = "#89b4fa" },
+                    Hint = { color = "#94e2d5" },
+                    Misc = { color = "#cba6f7" },
+                },
+                handlers = {
+                    cursor = true,
+                    diagnostic = true,
+                    search = true,
+                },
+                excluded_filetypes = {
+                    "neo-tree",
+                    "lazy",
+                    "TelescopePrompt",
+                },
+            })
+        end,
     }
 })
 
@@ -469,6 +535,10 @@ end, { desc = "Toggle Neo-tree" })
 
 -- Git
 vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<cr>", { desc = "Open Lazygit" })
+
+-- Illuminate navigation
+vim.keymap.set("n", "<C-n>", function() require("illuminate").goto_next_reference(false) end, { desc = "Next reference" })
+vim.keymap.set("n", "<C-p>", function() require("illuminate").goto_prev_reference(false) end, { desc = "Previous reference" })
 
 -- Buffer management
 vim.keymap.set("n", "<leader>w", function()
