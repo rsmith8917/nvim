@@ -502,8 +502,8 @@ vim.keymap.set("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", { desc = "Previous buffer" })
 
 -- Windows
-vim.keymap.set("n", "<leader>\\", "<C-w>v", { desc = "Split window vertically" })
-vim.keymap.set("n", "<leader>-", "<C-w>s", { desc = "Split window horizontally" })
+vim.keymap.set("n", "<leader>\\", "<C-w>v<C-w>l", { desc = "Split window vertically" })
+vim.keymap.set("n", "<leader>-", "<C-w>s<C-w>j", { desc = "Split window horizontally" })
 vim.keymap.set("n", "<leader>h", "<C-w>h", { desc = "Focus left window" })
 vim.keymap.set("n", "<leader>l", "<C-w>l", { desc = "Focus right window" })
 vim.keymap.set("n", "<leader>j", "<C-w>j", { desc = "Focus below window" })
