@@ -401,6 +401,17 @@ require("lazy").setup({
         end,
     },
 
+    -- Harpoon for quick file navigation
+    {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        config = function()
+            local harpoon = require("harpoon")
+            harpoon:setup()
+        end,
+    },
+
     -- Highlight references under cursor
     {
         "RRethy/vim-illuminate",
@@ -557,6 +568,21 @@ end, { desc = "Toggle Neo-tree" })
 
 -- Git
 vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<cr>", { desc = "Open Lazygit" })
+
+-- Harpoon
+vim.keymap.set("n", "<leader>a", function() 
+    local harpoon = require("harpoon")
+    harpoon:list():add()
+end, { desc = "Add file to Harpoon" })
+vim.keymap.set("n", "<leader>m", function()
+    local harpoon = require("harpoon")
+    harpoon.ui:toggle_quick_menu(harpoon:list())
+end, { desc = "Toggle Harpoon menu" })
+vim.keymap.set("n", "<leader>1", function() require("harpoon"):list():select(1) end, { desc = "Harpoon file 1" })
+vim.keymap.set("n", "<leader>2", function() require("harpoon"):list():select(2) end, { desc = "Harpoon file 2" })
+vim.keymap.set("n", "<leader>3", function() require("harpoon"):list():select(3) end, { desc = "Harpoon file 3" })
+vim.keymap.set("n", "<leader>4", function() require("harpoon"):list():select(4) end, { desc = "Harpoon file 4" })
+vim.keymap.set("n", "<leader>5", function() require("harpoon"):list():select(5) end, { desc = "Harpoon file 5" })
 
 -- Illuminate navigation
 vim.keymap.set("n", "<C-n>", function() require("illuminate").goto_next_reference(false) end, { desc = "Next reference" })
