@@ -28,11 +28,15 @@ function M.setup()
     vim.g.loaded_netrwPlugin = 1
 
     -- Folding settings (for ufo)
-    vim.o.foldcolumn = "1"
+    vim.o.foldcolumn = "0"
     vim.o.foldlevel = 99
     vim.o.foldlevelstart = 99
     vim.o.foldenable = true
     vim.o.fillchars = [[eob: ,fold: ,foldopen:▾,foldsep: ,foldclose:▸]]
+
+    -- Terminal title
+    vim.opt.title = true
+    vim.opt.titlestring = "nvim: %{fnamemodify(getcwd(), ':t')}"
 
     -- Setup autocommands
     M.setup_autocommands()
