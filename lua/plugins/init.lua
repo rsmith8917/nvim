@@ -28,6 +28,38 @@ return {
                 highlight = { enable = true },
                 indent = { enable = true },
             })
+
+            -- Set up custom highlighting for different log levels
+            vim.api.nvim_set_hl(0, "LogDebug", {
+                fg = "#6c7f96",  -- Dimmed blue
+                italic = false
+            })
+            vim.api.nvim_set_hl(0, "LogInfo", {
+                fg = "#6b9575",  -- Dimmed green
+                italic = false
+            })
+            vim.api.nvim_set_hl(0, "LogWarn", {
+                fg = "#a69460",  -- Dimmed yellow
+                italic = false
+            })
+            vim.api.nvim_set_hl(0, "LogError", {
+                fg = "#a66b6b",  -- Dimmed red
+                italic = false
+            })
+
+            -- Create autocmd to apply log highlighting after TreeSitter loads
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = { "go", "javascript", "typescript", "python", "lua" },
+                callback = function()
+                    vim.defer_fn(function()
+                        -- Match different log levels with different colors
+                        vim.fn.matchadd("LogDebug", "\\v^.*log\\.Debug[f]?\\s*\\(.*$")
+                        vim.fn.matchadd("LogInfo", "\\v^.*log\\.Info[f]?\\s*\\(.*$")
+                        vim.fn.matchadd("LogWarn", "\\v^.*log\\.Warn[f]?\\s*\\(.*$")
+                        vim.fn.matchadd("LogError", "\\v^.*log\\.(Error|Fatal)[f]?\\s*\\(.*$")
+                    end, 100)
+                end,
+            })
         end,
     },
 
