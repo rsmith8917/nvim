@@ -29,23 +29,11 @@ return {
                 indent = { enable = true },
             })
 
-            -- Set up custom highlighting for different log levels
-            vim.api.nvim_set_hl(0, "LogDebug", {
-                fg = "#6c7f96",  -- Dimmed blue
-                italic = false
-            })
-            vim.api.nvim_set_hl(0, "LogInfo", {
-                fg = "#6b9575",  -- Dimmed green
-                italic = false
-            })
-            vim.api.nvim_set_hl(0, "LogWarn", {
-                fg = "#a69460",  -- Dimmed yellow
-                italic = false
-            })
-            vim.api.nvim_set_hl(0, "LogError", {
-                fg = "#a66b6b",  -- Dimmed red
-                italic = false
-            })
+            -- Link all log highlighting to Comment style
+            vim.api.nvim_set_hl(0, "LogDebug", { link = "Comment" })
+            vim.api.nvim_set_hl(0, "LogInfo", { link = "Comment" })
+            vim.api.nvim_set_hl(0, "LogWarn", { link = "Comment" })
+            vim.api.nvim_set_hl(0, "LogError", { link = "Comment" })
 
             -- Create autocmd to apply log highlighting after TreeSitter loads
             vim.api.nvim_create_autocmd("FileType", {
@@ -469,6 +457,52 @@ return {
         dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
             vim.g.lazygit_floating_window_use_plenary = 1
+        end,
+    },
+
+    -- CODE COVERAGE
+    {
+        "andythigpen/nvim-coverage",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        config = function()
+            require("coverage").setup({
+                auto_reload = true,
+                load_coverage_cb = function(ftype)
+                    vim.notify("Loaded " .. ftype .. " coverage")
+                end,
+                commands = true, -- create commands
+                highlights = {
+                    -- customize highlight groups created by the plugin
+                    covered = { fg = "#b1e4a3" },     -- light green for covered lines
+                    uncovered = { fg = "#ff7070" },   -- light red for uncovered lines
+                    partial = { fg = "#ffdf87" },     -- light yellow for partially covered
+                },
+                signs = {
+                    -- use signs to show coverage
+                    covered = { hl = "CoverageCovered", text = "▎" },
+                    uncovered = { hl = "CoverageUncovered", text = "▎" },
+                    partial = { hl = "CoveragePartial", text = "▎" },
+                },
+                summary = {
+                    -- customize the summary popup
+                    min_coverage = 80.0,
+                },
+                lang = {
+                    -- customize per-language settings
+                    python = {
+                        coverage_command = "coverage json --fail-under=0 -q -o -",
+                    },
+                    javascript = {
+                        coverage_file = "coverage/lcov.info",
+                    },
+                    typescript = {
+                        coverage_file = "coverage/lcov.info",
+                    },
+                    go = {
+                        coverage_file = "coverage.out",
+                    },
+                },
+            })
         end,
     },
 }

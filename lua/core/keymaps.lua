@@ -142,6 +142,17 @@ function M.setup()
             vim.lsp.buf.hover()
         end
     end, { desc = "Peek fold/hover" })
+
+    -- Coverage
+    vim.keymap.set("n", "<leader>cc", function()
+        require("coverage").toggle()
+    end, { desc = "Toggle coverage display" })
+    vim.keymap.set("n", "<leader>cs", function()
+        require("coverage").summary()
+    end, { desc = "Show coverage summary" })
+    vim.keymap.set("n", "<leader>cl", function()
+        require("coverage").load(true)
+    end, { desc = "Load/reload coverage" })
 end
 
 return M
