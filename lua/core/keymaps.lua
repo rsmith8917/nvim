@@ -19,6 +19,24 @@ function M.setup()
     vim.keymap.set("n", "<leader>bD", function()
         require("mini.bufremove").delete(0, true)
     end, { desc = "Delete buffer (force)" })
+    vim.keymap.set("n", "<leader>ba", function()
+        local current = vim.api.nvim_get_current_buf()
+        local buffers = vim.api.nvim_list_bufs()
+        for _, buf in ipairs(buffers) do
+            if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, "buflisted") then
+                require("mini.bufremove").delete(buf, false)
+            end
+        end
+    end, { desc = "Close all buffers" })
+    vim.keymap.set("n", "<leader>bo", function()
+        local current = vim.api.nvim_get_current_buf()
+        local buffers = vim.api.nvim_list_bufs()
+        for _, buf in ipairs(buffers) do
+            if buf ~= current and vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, "buflisted") then
+                require("mini.bufremove").delete(buf, false)
+            end
+        end
+    end, { desc = "Close other buffers" })
 
     -- Windows
     vim.keymap.set("n", "<leader>\\", "<C-w>v<C-w>l", { desc = "Split vertically" })
