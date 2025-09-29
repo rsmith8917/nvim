@@ -18,7 +18,7 @@ function M.setup()
     vim.opt.termguicolors = true
     vim.opt.cursorline = true
     vim.opt.clipboard = "unnamedplus"
-    vim.opt.scrolloff = 12
+    vim.opt.scrolloff = 16
     vim.opt.sidescrolloff = 8
 
     -- Buffer settings (for mini.bufremove)
@@ -121,3 +121,4 @@ function M.setup_commands()
 end
 
 return M
+
