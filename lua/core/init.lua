@@ -84,7 +84,11 @@ function M.setup_autocommands()
     vim.api.nvim_create_autocmd("BufWritePre", {
         pattern = "*",
         callback = function(args)
-            require("conform").format({ bufnr = args.buf, lsp_fallback = true })
+            local ok, conform = pcall(require, "conform")
+            if not ok then
+                return
+            end
+            conform.format({ bufnr = args.buf, lsp_fallback = true })
         end,
     })
 end

@@ -8,7 +8,17 @@ function M.setup()
     -- Core
     vim.keymap.set("n", "<leader>s", ":w<CR>", { desc = "Save file" })
     vim.keymap.set("n", "<leader>q", "<cmd>qa!<CR>", { desc = "Quit all (force)" })
-    vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { desc = "Clear search highlight" })
+    vim.keymap.set("n", "<Esc>", function()
+        local win = vim.api.nvim_get_current_win()
+        local win_config = vim.api.nvim_win_get_config(win)
+        if win_config.relative and win_config.relative ~= "" then
+            -- This is a floating window, close it
+            vim.api.nvim_win_close(win, false)
+        else
+            -- Not a floating window, clear search highlight
+            vim.cmd("nohlsearch")
+        end
+    end, { desc = "Close floating window or clear search" })
 
     -- Buffers
     vim.keymap.set("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer" })
@@ -20,10 +30,9 @@ function M.setup()
         require("mini.bufremove").delete(0, true)
     end, { desc = "Delete buffer (force)" })
     vim.keymap.set("n", "<leader>ba", function()
-        local current = vim.api.nvim_get_current_buf()
         local buffers = vim.api.nvim_list_bufs()
         for _, buf in ipairs(buffers) do
-            if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, "buflisted") then
+            if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buflisted then
                 require("mini.bufremove").delete(buf, false)
             end
         end
@@ -32,7 +41,7 @@ function M.setup()
         local current = vim.api.nvim_get_current_buf()
         local buffers = vim.api.nvim_list_bufs()
         for _, buf in ipairs(buffers) do
-            if buf ~= current and vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, "buflisted") then
+            if buf ~= current and vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buflisted then
                 require("mini.bufremove").delete(buf, false)
             end
         end

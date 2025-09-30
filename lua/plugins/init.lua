@@ -263,24 +263,6 @@ return {
             "rcarriga/nvim-notify",
         },
         config = function()
-            -- Set up keymaps to handle ESC in floating windows properly
-            vim.api.nvim_create_autocmd("FileType", {
-                pattern = "*",
-                callback = function()
-                    vim.keymap.set("n", "<Esc>", function()
-                        local win = vim.api.nvim_get_current_win()
-                        local win_config = vim.api.nvim_win_get_config(win)
-                        if win_config.relative and win_config.relative ~= "" then
-                            -- This is a floating window, close it
-                            vim.api.nvim_win_close(win, false)
-                        else
-                            -- Not a floating window, clear search highlight
-                            vim.cmd("nohlsearch")
-                        end
-                    end, { buffer = true, desc = "Close floating window or clear search" })
-                end,
-            })
-
             require("noice").setup({
                 lsp = {
                     -- Disable noice for LSP hover and signature to avoid conflicts
@@ -494,7 +476,7 @@ return {
                 handlers = {
                     cursor = true,
                     diagnostic = true,
-                    search = true,
+                    search = false,
                 },
                 excluded_filetypes = {
                     "neo-tree",
@@ -572,6 +554,57 @@ return {
 
     -- EDITING ENHANCEMENTS
     {
+        "folke/trouble.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        cmd = "Trouble",
+        keys = {
+            { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
+            {
+                "<leader>xd",
+                "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+                desc = "Buffer Diagnostics (Trouble)",
+            },
+            { "<leader>xl", "<cmd>Trouble loclist toggle<cr>", desc = "Location List (Trouble)" },
+            { "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
+        },
+        config = function()
+            require("trouble").setup()
+        end,
+    },
+
+    {
+        "numToStr/Comment.nvim",
+        keys = {
+            { "gc", mode = { "n", "v" }, desc = "Comment toggle linewise" },
+            { "gb", mode = { "n", "v" }, desc = "Comment toggle blockwise" },
+        },
+        config = function()
+            require("Comment").setup()
+        end,
+    },
+
+    {
+        "kylechui/nvim-surround",
+        version = "*",
+        event = "VeryLazy",
+        config = function()
+            require("nvim-surround").setup()
+        end,
+    },
+
+    {
+        "lukas-reineke/indent-blankline.nvim",
+        main = "ibl",
+        event = { "BufReadPost", "BufNewFile" },
+        config = function()
+            require("ibl").setup({
+                indent = { char = "▏" },
+                scope = { enabled = false },
+            })
+        end,
+    },
+
+    {
         "RRethy/vim-illuminate",
         event = { "BufReadPost", "BufNewFile" },
         config = function()
@@ -628,6 +661,63 @@ return {
     },
 
     -- GIT INTEGRATION
+    {
+        "lewis6991/gitsigns.nvim",
+        event = { "BufReadPost", "BufNewFile" },
+        config = function()
+            require("gitsigns").setup({
+                signs = {
+                    add = { text = "▎" },
+                    change = { text = "▎" },
+                    delete = { text = "" },
+                    topdelete = { text = "" },
+                    changedelete = { text = "▎" },
+                },
+                on_attach = function(bufnr)
+                    local gs = package.loaded.gitsigns
+
+                    local function map(mode, l, r, opts)
+                        opts = opts or {}
+                        opts.buffer = bufnr
+                        vim.keymap.set(mode, l, r, opts)
+                    end
+
+                    -- Navigation
+                    map("n", "]h", function()
+                        if vim.wo.diff then
+                            return "]h"
+                        end
+                        vim.schedule(function()
+                            gs.next_hunk()
+                        end)
+                        return "<Ignore>"
+                    end, { expr = true, desc = "Next hunk" })
+
+                    map("n", "[h", function()
+                        if vim.wo.diff then
+                            return "[h"
+                        end
+                        vim.schedule(function()
+                            gs.prev_hunk()
+                        end)
+                        return "<Ignore>"
+                    end, { expr = true, desc = "Previous hunk" })
+
+                    -- Actions
+                    map("n", "<leader>gp", gs.preview_hunk, { desc = "Preview hunk" })
+                    map("n", "<leader>gb", function()
+                        gs.blame_line({ full = true })
+                    end, { desc = "Blame line" })
+                    map("n", "<leader>gd", gs.diffthis, { desc = "Diff this" })
+                    map("n", "<leader>gr", gs.reset_hunk, { desc = "Reset hunk" })
+                    map("n", "<leader>gR", gs.reset_buffer, { desc = "Reset buffer" })
+                    map("n", "<leader>gs", gs.stage_hunk, { desc = "Stage hunk" })
+                    map("n", "<leader>gu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
+                end,
+            })
+        end,
+    },
+
     {
         "kdheepak/lazygit.nvim",
         cmd = "LazyGit",
