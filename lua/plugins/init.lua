@@ -286,16 +286,16 @@ return {
                 },
                 -- you can enable a preset for easier configuration
                 presets = {
-                    bottom_search = true, -- use a classic bottom cmdline for search
-                    command_palette = true, -- position the cmdline and popupmenu together
+                    bottom_search = true,         -- use a classic bottom cmdline for search
+                    command_palette = true,       -- position the cmdline and popupmenu together
                     long_message_to_split = true, -- long messages will be sent to a split
-                    inc_rename = false, -- enables an input dialog for inc-rename.nvim
-                    lsp_doc_border = false, -- add a border to hover docs and signature help
+                    inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+                    lsp_doc_border = false,       -- add a border to hover docs and signature help
                 },
                 cmdline = {
-                    enabled = true, -- enables the Noice cmdline UI
+                    enabled = true,         -- enables the Noice cmdline UI
                     view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` for classic cmdline
-                    opts = {}, -- global options for the cmdline. See section on views
+                    opts = {},              -- global options for the cmdline. See section on views
                     format = {
                         -- conceal: (default=true) This will hide the text in the cmdline that matches the pattern.
                         -- view: (default is cmdline view)
@@ -311,15 +311,15 @@ return {
                     },
                 },
                 messages = {
-                    enabled = true, -- enables the Noice messages UI
-                    view = "notify", -- default view for messages
-                    view_error = "notify", -- view for errors
-                    view_warn = "notify", -- view for warnings
-                    view_history = "messages", -- view for :messages
+                    enabled = true,              -- enables the Noice messages UI
+                    view = "notify",             -- default view for messages
+                    view_error = "notify",       -- view for errors
+                    view_warn = "notify",        -- view for warnings
+                    view_history = "messages",   -- view for :messages
                     view_search = "virtualtext", -- view for search count messages. Set to `false` to disable
                 },
                 popupmenu = {
-                    enabled = true, -- enables the Noice popupmenu UI
+                    enabled = true,  -- enables the Noice popupmenu UI
                     backend = "nui", -- backend to use to show regular cmdline completions
                 },
                 notify = {
@@ -564,8 +564,8 @@ return {
                 "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
                 desc = "Buffer Diagnostics (Trouble)",
             },
-            { "<leader>xl", "<cmd>Trouble loclist toggle<cr>", desc = "Location List (Trouble)" },
-            { "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
+            { "<leader>xl", "<cmd>Trouble loclist toggle<cr>",     desc = "Location List (Trouble)" },
+            { "<leader>xq", "<cmd>Trouble qflist toggle<cr>",      desc = "Quickfix List (Trouble)" },
         },
         config = function()
             require("trouble").setup()
@@ -662,63 +662,6 @@ return {
 
     -- GIT INTEGRATION
     {
-        "lewis6991/gitsigns.nvim",
-        event = { "BufReadPost", "BufNewFile" },
-        config = function()
-            require("gitsigns").setup({
-                signs = {
-                    add = { text = "▎" },
-                    change = { text = "▎" },
-                    delete = { text = "" },
-                    topdelete = { text = "" },
-                    changedelete = { text = "▎" },
-                },
-                on_attach = function(bufnr)
-                    local gs = package.loaded.gitsigns
-
-                    local function map(mode, l, r, opts)
-                        opts = opts or {}
-                        opts.buffer = bufnr
-                        vim.keymap.set(mode, l, r, opts)
-                    end
-
-                    -- Navigation
-                    map("n", "]h", function()
-                        if vim.wo.diff then
-                            return "]h"
-                        end
-                        vim.schedule(function()
-                            gs.next_hunk()
-                        end)
-                        return "<Ignore>"
-                    end, { expr = true, desc = "Next hunk" })
-
-                    map("n", "[h", function()
-                        if vim.wo.diff then
-                            return "[h"
-                        end
-                        vim.schedule(function()
-                            gs.prev_hunk()
-                        end)
-                        return "<Ignore>"
-                    end, { expr = true, desc = "Previous hunk" })
-
-                    -- Actions
-                    map("n", "<leader>gp", gs.preview_hunk, { desc = "Preview hunk" })
-                    map("n", "<leader>gb", function()
-                        gs.blame_line({ full = true })
-                    end, { desc = "Blame line" })
-                    map("n", "<leader>gd", gs.diffthis, { desc = "Diff this" })
-                    map("n", "<leader>gr", gs.reset_hunk, { desc = "Reset hunk" })
-                    map("n", "<leader>gR", gs.reset_buffer, { desc = "Reset buffer" })
-                    map("n", "<leader>gs", gs.stage_hunk, { desc = "Stage hunk" })
-                    map("n", "<leader>gu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
-                end,
-            })
-        end,
-    },
-
-    {
         "kdheepak/lazygit.nvim",
         cmd = "LazyGit",
         dependencies = { "nvim-lua/plenary.nvim" },
@@ -740,9 +683,9 @@ return {
                 commands = true, -- create commands
                 highlights = {
                     -- customize highlight groups created by the plugin
-                    covered = { fg = "#b1e4a3" },     -- light green for covered lines
-                    uncovered = { fg = "#ff7070" },   -- light red for uncovered lines
-                    partial = { fg = "#ffdf87" },     -- light yellow for partially covered
+                    covered = { fg = "#b1e4a3" },   -- light green for covered lines
+                    uncovered = { fg = "#ff7070" }, -- light red for uncovered lines
+                    partial = { fg = "#ffdf87" },   -- light yellow for partially covered
                 },
                 signs = {
                     -- use signs to show coverage
@@ -773,3 +716,4 @@ return {
         end,
     },
 }
+
