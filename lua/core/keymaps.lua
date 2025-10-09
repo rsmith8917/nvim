@@ -107,6 +107,9 @@ function M.setup()
             end,
         })
     end, { desc = "Live grep all" })
+    vim.keymap.set("n", "<leader>ft", function()
+        require("telescope.builtin").colorscheme({ enable_preview = true })
+    end, { desc = "Theme picker" })
 
     -- Neo-tree
     vim.keymap.set("n", "<leader>e", function()

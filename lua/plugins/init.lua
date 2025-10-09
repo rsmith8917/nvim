@@ -11,6 +11,7 @@ return {
             require("nvim-treesitter.configs").setup({
                 ensure_installed = {
                     "bash",
+                    "c",
                     "css",
                     "go",
                     "html",
@@ -27,26 +28,6 @@ return {
                 auto_install = true,
                 highlight = { enable = true },
                 indent = { enable = true },
-            })
-
-            -- Link all log highlighting to Comment style
-            vim.api.nvim_set_hl(0, "LogDebug", { link = "Comment" })
-            vim.api.nvim_set_hl(0, "LogInfo", { link = "Comment" })
-            vim.api.nvim_set_hl(0, "LogWarn", { link = "Comment" })
-            vim.api.nvim_set_hl(0, "LogError", { link = "Comment" })
-
-            -- Create autocmd to apply log highlighting after TreeSitter loads
-            vim.api.nvim_create_autocmd("FileType", {
-                pattern = { "go", "javascript", "typescript", "python", "lua" },
-                callback = function()
-                    vim.defer_fn(function()
-                        -- Match different log levels with different colors
-                        vim.fn.matchadd("LogDebug", "\\v^.*log\\.Debug[f]?\\s*\\(.*$")
-                        vim.fn.matchadd("LogInfo", "\\v^.*log\\.Info[f]?\\s*\\(.*$")
-                        vim.fn.matchadd("LogWarn", "\\v^.*log\\.Warn[f]?\\s*\\(.*$")
-                        vim.fn.matchadd("LogError", "\\v^.*log\\.(Error|Fatal)[f]?\\s*\\(.*$")
-                    end, 100)
-                end,
             })
         end,
     },
@@ -177,6 +158,11 @@ return {
             lspconfig.pyright.setup({
                 capabilities = cmp_capabilities,
             })
+
+            -- C/C++
+            lspconfig.clangd.setup({
+                capabilities = cmp_capabilities,
+            })
         end,
     },
 
@@ -238,6 +224,8 @@ return {
         config = function()
             require("conform").setup({
                 formatters_by_ft = {
+                    c = { "clang_format" },
+                    cpp = { "clang_format" },
                     css = { "prettier" },
                     go = { "gofmt" },
                     html = { "prettier" },
@@ -425,7 +413,81 @@ return {
                     },
                 },
             })
-            vim.cmd.colorscheme("catppuccin")
+        end,
+    },
+
+    {
+        "EdenEast/nightfox.nvim",
+        priority = 1000,
+        config = function()
+            require("nightfox").setup({
+                options = {
+                    transparent = false,
+                    dim_inactive = false,
+                },
+            })
+        end,
+    },
+
+    {
+        "folke/tokyonight.nvim",
+        priority = 1000,
+        config = function()
+            require("tokyonight").setup({
+                style = "night", -- storm, moon, night, day
+                transparent = false,
+                terminal_colors = true,
+            })
+        end,
+    },
+
+    {
+        "rose-pine/neovim",
+        name = "rose-pine",
+        priority = 1000,
+        config = function()
+            require("rose-pine").setup({
+                variant = "main", -- auto, main, moon, or dawn
+                dark_variant = "main",
+            })
+        end,
+    },
+
+    {
+        "rebelot/kanagawa.nvim",
+        priority = 1000,
+        config = function()
+            require("kanagawa").setup({
+                transparent = false,
+            })
+        end,
+    },
+
+    {
+        "Mofiqul/dracula.nvim",
+        priority = 1000,
+        config = function()
+            require("dracula").setup()
+        end,
+    },
+
+    {
+        "navarasu/onedark.nvim",
+        priority = 1000,
+        config = function()
+            require("onedark").setup({
+                style = "dark", -- dark, darker, cool, deep, warm, warmer
+            })
+        end,
+    },
+
+    -- Set default colorscheme (load after all theme plugins)
+    {
+        "default-colorscheme",
+        dir = vim.fn.stdpath("config"),
+        priority = 999,
+        config = function()
+            vim.cmd.colorscheme("carbonfox")
         end,
     },
 
@@ -716,4 +778,3 @@ return {
         end,
     },
 }
-
