@@ -434,7 +434,7 @@ return {
         priority = 1000,
         config = function()
             require("tokyonight").setup({
-                style = "night", -- storm, moon, night, day
+                style = "moon", -- storm, moon, night, day
                 transparent = false,
                 terminal_colors = true,
             })
@@ -472,11 +472,53 @@ return {
     },
 
     {
-        "navarasu/onedark.nvim",
+        "projekt0n/github-nvim-theme",
+        name = "github-theme",
         priority = 1000,
         config = function()
-            require("onedark").setup({
-                style = "dark", -- dark, darker, cool, deep, warm, warmer
+            require("github-theme").setup({
+                options = {
+                    transparent = false,
+                    terminal_colors = true,
+                    dim_inactive = false,
+                    styles = {
+                        comments = "italic",
+                        functions = "NONE",
+                        keywords = "bold",
+                        variables = "NONE",
+                    },
+                },
+            })
+        end,
+    },
+
+    {
+        "olimorris/onedarkpro.nvim",
+        priority = 1000,
+        config = function()
+            require("onedarkpro").setup({
+                options = {
+                    transparency = false,
+                    terminal_colors = true,
+                    highlight_inactive_windows = false,
+                },
+            })
+        end,
+    },
+
+    {
+        "nyoom-engineering/oxocarbon.nvim",
+        priority = 1000,
+    },
+
+    {
+        "ellisonleao/gruvbox.nvim",
+        priority = 1000,
+        config = function()
+            require("gruvbox").setup({
+                contrast = "", -- Can be "hard", "soft" or empty string
+                transparent_mode = false,
+                terminal_colors = true,
             })
         end,
     },
@@ -487,7 +529,7 @@ return {
         dir = vim.fn.stdpath("config"),
         priority = 999,
         config = function()
-            vim.cmd.colorscheme("carbonfox")
+            vim.cmd.colorscheme("catppuccin-mocha")
         end,
     },
 
