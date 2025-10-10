@@ -183,6 +183,9 @@ function M.setup()
     vim.keymap.set("n", "<leader>cl", function()
         require("coverage").load(true)
     end, { desc = "Load/reload coverage" })
+
+    -- Markdown
+    vim.keymap.set("n", "<leader>md", "<cmd>RenderMarkdown toggle<CR>", { desc = "Toggle markdown rendering" })
 end
 
 return M
