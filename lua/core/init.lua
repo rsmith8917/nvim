@@ -20,6 +20,7 @@ function M.setup()
     vim.opt.clipboard = "unnamedplus"
     vim.opt.scrolloff = 16
     vim.opt.sidescrolloff = 8
+    vim.opt.cmdheight = 0
 
     -- Buffer settings (for mini.bufremove)
     vim.opt.confirm = true
