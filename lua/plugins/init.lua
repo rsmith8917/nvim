@@ -106,6 +106,7 @@ return {
                                 "--hidden",
                                 "--glob=!.git/*",
                                 "--glob=!node_modules/*",
+
                                 "--glob=!dist/*",
                                 "--glob=!build/*",
                                 "--glob=!coverage/*",
@@ -485,25 +486,6 @@ return {
     },
 
     {
-        "olimorris/onedarkpro.nvim",
-        priority = 1000,
-        config = function()
-            require("onedarkpro").setup({
-                options = {
-                    transparency = false,
-                    terminal_colors = true,
-                    highlight_inactive_windows = false,
-                },
-            })
-        end,
-    },
-
-    {
-        "nyoom-engineering/oxocarbon.nvim",
-        priority = 1000,
-    },
-
-    {
         "ellisonleao/gruvbox.nvim",
         priority = 1000,
         config = function()
@@ -525,6 +507,16 @@ return {
                 disable_nvimtree_bg = true,
             })
         end,
+    },
+
+    {
+        "datsfilipe/vesper.nvim",
+        priority = 1000,
+    },
+
+    {
+        "mellow-theme/mellow.nvim",
+        priority = 1000,
     },
 
     -- Set default colorscheme (load after all theme plugins)
