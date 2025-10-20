@@ -129,12 +129,15 @@ return {
     {
         "neovim/nvim-lspconfig",
         config = function()
-            local lspconfig = require("lspconfig")
             local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-            -- Lua
-            lspconfig.lua_ls.setup({
+            -- Set global LSP configuration with cmp capabilities
+            vim.lsp.config('*', {
                 capabilities = cmp_capabilities,
+            })
+
+            -- Lua with custom settings
+            vim.lsp.config('lua_ls', {
                 settings = {
                     Lua = {
                         diagnostics = {
@@ -144,24 +147,13 @@ return {
                 },
             })
 
-            -- Go
-            lspconfig.gopls.setup({
-                capabilities = cmp_capabilities,
-            })
-
-            -- TypeScript/JavaScript
-            lspconfig.ts_ls.setup({
-                capabilities = cmp_capabilities,
-            })
-
-            -- Python
-            lspconfig.pyright.setup({
-                capabilities = cmp_capabilities,
-            })
-
-            -- C/C++
-            lspconfig.clangd.setup({
-                capabilities = cmp_capabilities,
+            -- Enable all LSP servers
+            vim.lsp.enable({
+                'lua_ls',
+                'gopls',
+                'ts_ls',
+                'pyright',
+                'clangd',
             })
         end,
     },
