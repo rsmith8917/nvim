@@ -1,14 +1,11 @@
 -- ============================================================================
---                              NEOVIM CONFIGURATION
+-- NEOVIM CONFIGURATION
 -- ============================================================================
 
--- Load core settings, autocommands, and diagnostics
+-- Core settings, autocommands, and diagnostics
 require("core").setup()
 
--- ============================================================================
--- LAZY.NVIM BOOTSTRAP
--- ============================================================================
-
+-- Bootstrap lazy.nvim plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
@@ -22,8 +19,8 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Load plugin specifications
+-- Load plugins
 require("lazy").setup("plugins")
 
--- Load keymaps (after plugins are loaded)
+-- Load keymaps (after plugins to ensure plugin functions are available)
 require("core.keymaps").setup()

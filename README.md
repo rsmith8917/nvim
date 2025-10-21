@@ -106,14 +106,27 @@ pip install black
 
 ```
 ~/.config/nvim/
-├── init.lua                 # Entry point
+├── init.lua                       # Entry point
+├── CLAUDE.md                      # Project documentation for AI assistant
+├── RECOMMENDATIONS.md             # Config optimization guide
 ├── lua/
 │   ├── core/
-│   │   ├── init.lua        # Core settings, autocommands
-│   │   └── keymaps.lua     # All keybindings
+│   │   ├── init.lua              # Core settings, autocommands, utilities
+│   │   └── keymaps.lua           # All keybindings
 │   └── plugins/
-│       └── init.lua        # Plugin specifications
-└── lazy-lock.json          # Plugin versions (auto-generated)
+│       ├── init.lua              # Plugin loader (imports all modules)
+│       ├── treesitter.lua        # Syntax highlighting
+│       ├── telescope.lua         # Fuzzy finder
+│       ├── lsp.lua               # LSP & completion
+│       ├── formatting.lua        # Code formatting
+│       ├── colorschemes.lua      # Themes
+│       ├── ui.lua                # UI enhancements
+│       ├── navigation.lua        # File navigation
+│       ├── editing.lua           # Editing tools
+│       ├── git.lua               # Git integration
+│       ├── coverage.lua          # Code coverage
+│       └── markdown.lua          # Markdown rendering
+└── lazy-lock.json                # Plugin versions (auto-generated)
 ```
 
 ## Plugin Management
@@ -132,48 +145,80 @@ All plugins are managed by [lazy.nvim](https://github.com/folke/lazy.nvim).
 
 ### Configured Languages
 
-| Language   | LSP Server | Formatter | Status |
-|------------|------------|-----------|--------|
-| Lua        | lua_ls     | stylua    | ✓      |
-| Go         | gopls      | gofmt     | ✓      |
-| TypeScript | ts_ls      | prettier  | ✓      |
-| Python     | pyright    | black     | ✓      |
+| Language   | LSP Server | Formatter     | Status |
+|------------|------------|---------------|--------|
+| Lua        | lua_ls     | stylua        | ✓      |
+| Go         | gopls      | gofmt         | ✓      |
+| TypeScript | ts_ls      | prettier      | ✓      |
+| Python     | pyright    | black         | ✓      |
+| C/C++      | clangd     | clang_format  | ✓      |
 
 ### Adding More Languages
 
 1. Install the language server (check [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md))
-2. Add configuration in `lua/plugins/init.lua` under the LSP section
-3. Add formatter in `lua/plugins/init.lua` under conform.nvim config
+2. Add configuration in `lua/plugins/lsp.lua` in the `vim.lsp.enable()` list
+3. Add formatter in `lua/plugins/formatting.lua` under the `formatters_by_ft` table
 4. Restart Neovim
 
 ## Customization
 
 ### Changing the Theme
 
-Edit `lua/plugins/init.lua`:
+Edit `lua/plugins/colorschemes.lua` at the bottom:
 ```lua
--- Change from "mocha" to "latte", "frappe", "macchiato", or "mocha"
-flavour = "mocha",
+-- Set default colorscheme
+config = function()
+    vim.cmd.colorscheme("catppuccin-mocha")  -- Change theme here
+end,
 ```
+
+Available themes: `catppuccin-mocha`, `tokyonight-moon`, `gruvbox`, `rose-pine`, etc.
+
+Or use the theme picker: `Space` `f` `t`
 
 ### Adding Keymaps
 
-Add to `lua/core/keymaps.lua`:
+Add to `lua/core/keymaps.lua` in the appropriate section:
 ```lua
 vim.keymap.set("n", "<leader>x", ":YourCommand<CR>", { desc = "Description" })
 ```
 
+### Adding a Plugin
+
+Create or edit the appropriate file in `lua/plugins/`:
+```lua
+-- In lua/plugins/editing.lua or create a new file
+return {
+    {
+        "username/plugin-name",
+        config = function()
+            require("plugin-name").setup()
+        end,
+    },
+}
+```
+
+Then add import to `lua/plugins/init.lua` if you created a new file:
+```lua
+{ import = "plugins.your-new-file" },
+```
+
 ### Disabling Auto-format on Save
 
-Comment out in `lua/core/init.lua` (lines 84-89):
+Comment out in `lua/core/init.lua` (autocommands section):
 ```lua
 -- vim.api.nvim_create_autocmd("BufWritePre", {
 --     pattern = "*",
 --     callback = function(args)
---         require("conform").format({ bufnr = args.buf, lsp_fallback = true })
+--         local ok, conform = pcall(require, "conform")
+--         if ok then
+--             conform.format({ bufnr = args.buf, lsp_fallback = true })
+--         end
 --     end,
 -- })
 ```
+
+See `RECOMMENDATIONS.md` for detailed plugin analysis and optimization options.
 
 ## Code Coverage
 

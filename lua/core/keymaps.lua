@@ -5,22 +5,24 @@
 local M = {}
 
 function M.setup()
-    -- Core
+    -- ========================================================================
+    -- CORE
+    -- ========================================================================
     vim.keymap.set("n", "<leader>s", ":w<CR>", { desc = "Save file" })
     vim.keymap.set("n", "<leader>q", "<cmd>qa!<CR>", { desc = "Quit all (force)" })
     vim.keymap.set("n", "<Esc>", function()
         local win = vim.api.nvim_get_current_win()
         local win_config = vim.api.nvim_win_get_config(win)
         if win_config.relative and win_config.relative ~= "" then
-            -- This is a floating window, close it
             vim.api.nvim_win_close(win, false)
         else
-            -- Not a floating window, clear search highlight
             vim.cmd("nohlsearch")
         end
     end, { desc = "Close floating window or clear search" })
 
-    -- Buffers
+    -- ========================================================================
+    -- BUFFERS
+    -- ========================================================================
     vim.keymap.set("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer" })
     vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", { desc = "Previous buffer" })
     vim.keymap.set("n", "<leader>bd", function()
@@ -47,30 +49,20 @@ function M.setup()
         end
     end, { desc = "Close other buffers" })
 
-    -- Windows
+    -- ========================================================================
+    -- WINDOWS
+    -- ========================================================================
     vim.keymap.set("n", "<leader>\\", "<C-w>v<C-w>l", { desc = "Split vertically" })
     vim.keymap.set("n", "<leader>-", "<C-w>s<C-w>j", { desc = "Split horizontally" })
     vim.keymap.set("n", "<leader>h", "<C-w>h", { desc = "Focus left" })
     vim.keymap.set("n", "<leader>l", "<C-w>l", { desc = "Focus right" })
     vim.keymap.set("n", "<leader>j", "<C-w>j", { desc = "Focus down" })
     vim.keymap.set("n", "<leader>k", "<C-w>k", { desc = "Focus up" })
-    vim.keymap.set("n", "<leader>w", function()
-        local only_tab = #vim.api.nvim_list_tabpages() == 1
-        local only_win = #vim.api.nvim_list_wins() == 1
-        if not (only_tab and only_win) then
-            vim.cmd("close")
-            return
-        end
-        -- Create scratch buffer instead of quitting
-        local newbuf = vim.api.nvim_create_buf(true, false)
-        vim.api.nvim_set_current_buf(newbuf)
-        vim.bo[newbuf].buftype = ""
-        vim.bo[newbuf].bufhidden = "hide"
-        vim.bo[newbuf].swapfile = false
-        vim.api.nvim_buf_set_lines(newbuf, 0, -1, false, { "" })
-    end, { desc = "Close window" })
+    vim.keymap.set("n", "<leader>w", require("core").safe_window_close, { desc = "Close window" })
 
+    -- ========================================================================
     -- LSP
+    -- ========================================================================
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
     vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Find references" })
     vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
@@ -81,7 +73,9 @@ function M.setup()
         require("conform").format({ async = true, lsp_fallback = true })
     end, { desc = "Format buffer" })
 
-    -- Telescope
+    -- ========================================================================
+    -- TELESCOPE
+    -- ========================================================================
     vim.keymap.set("n", "<leader>ff", function()
         require("telescope.builtin").find_files()
     end, { desc = "Find files" })
@@ -111,7 +105,9 @@ function M.setup()
         require("telescope.builtin").colorscheme({ enable_preview = true })
     end, { desc = "Theme picker" })
 
-    -- Neo-tree
+    -- ========================================================================
+    -- FILE EXPLORER
+    -- ========================================================================
     vim.keymap.set("n", "<leader>e", function()
         require("neo-tree.command").execute({
             source = "filesystem",
@@ -120,10 +116,14 @@ function M.setup()
         })
     end, { desc = "Toggle file explorer" })
 
-    -- Git
+    -- ========================================================================
+    -- GIT
+    -- ========================================================================
     vim.keymap.set("n", "<leader>gg", "<cmd>LazyGit<cr>", { desc = "Open LazyGit" })
 
-    -- Harpoon
+    -- ========================================================================
+    -- HARPOON
+    -- ========================================================================
     vim.keymap.set("n", "<leader>a", function()
         local harpoon = require("harpoon")
         harpoon:list():add()
@@ -148,7 +148,9 @@ function M.setup()
         require("harpoon"):list():select(5)
     end, { desc = "Harpoon file 5" })
 
-    -- Illuminate
+    -- ========================================================================
+    -- REFERENCE NAVIGATION
+    -- ========================================================================
     vim.keymap.set("n", "<C-n>", function()
         require("illuminate").goto_next_reference(false)
     end, { desc = "Next reference" })
@@ -156,7 +158,9 @@ function M.setup()
         require("illuminate").goto_prev_reference(false)
     end, { desc = "Previous reference" })
 
-    -- Folding
+    -- ========================================================================
+    -- FOLDING
+    -- ========================================================================
     vim.keymap.set("n", "-", "za", { desc = "Toggle fold" })
     vim.keymap.set("n", "zo", "zO", { desc = "Open fold recursively" })
     vim.keymap.set("n", "zc", "zC", { desc = "Close fold recursively" })
@@ -173,7 +177,9 @@ function M.setup()
         end
     end, { desc = "Peek fold/hover" })
 
-    -- Coverage
+    -- ========================================================================
+    -- COVERAGE
+    -- ========================================================================
     vim.keymap.set("n", "<leader>cc", function()
         require("coverage").toggle()
     end, { desc = "Toggle coverage display" })
@@ -184,7 +190,9 @@ function M.setup()
         require("coverage").load(true)
     end, { desc = "Load/reload coverage" })
 
-    -- Markdown
+    -- ========================================================================
+    -- MARKDOWN
+    -- ========================================================================
     vim.keymap.set("n", "<leader>md", "<cmd>RenderMarkdown toggle<CR>", { desc = "Toggle markdown rendering" })
 end
 
