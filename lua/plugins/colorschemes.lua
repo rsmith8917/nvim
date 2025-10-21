@@ -124,7 +124,7 @@ return {
         dir = vim.fn.stdpath("config"),
         priority = 999,
         config = function()
-            vim.cmd.colorscheme("catppuccin-mocha")
+            vim.cmd.colorscheme("tokyonight-night")
         end,
     },
 }
