@@ -107,18 +107,6 @@ return {
     },
 
     {
-        "ellisonleao/gruvbox.nvim",
-        priority = 1000,
-        config = function()
-            require("gruvbox").setup({
-                contrast = "", -- Can be "hard", "soft" or empty string
-                transparent_mode = false,
-                terminal_colors = true,
-            })
-        end,
-    },
-
-    {
         "Mofiqul/vscode.nvim",
         priority = 1000,
         config = function()
@@ -128,16 +116,6 @@ return {
                 disable_nvimtree_bg = true,
             })
         end,
-    },
-
-    {
-        "datsfilipe/vesper.nvim",
-        priority = 1000,
-    },
-
-    {
-        "mellow-theme/mellow.nvim",
-        priority = 1000,
     },
 
     -- Set default colorscheme (load after all theme plugins)
