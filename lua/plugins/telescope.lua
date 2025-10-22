@@ -14,6 +14,7 @@ return {
                 build = "make",
                 cond = vim.fn.executable("make") == 1,
             },
+            "nvim-telescope/telescope-file-browser.nvim",
         },
         config = function()
             local telescope = require("telescope")
@@ -89,10 +90,17 @@ return {
                         fuzzy = true,
                         case_mode = "smart_case",
                     },
+                    file_browser = {
+                        theme = "ivy",
+                        hijack_netrw = false,
+                        grouped = true,
+                        hidden = true,
+                    },
                 },
             })
 
             pcall(telescope.load_extension, "fzf")
+            pcall(telescope.load_extension, "file_browser")
         end,
     },
 }

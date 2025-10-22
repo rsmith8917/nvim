@@ -76,6 +76,25 @@ function M.setup()
     -- ========================================================================
     -- TELESCOPE
     -- ========================================================================
+    vim.keymap.set("n", "<leader>fp", function()
+        local actions = require("telescope.actions")
+        local action_state = require("telescope.actions.state")
+
+        require("telescope").extensions.projects.projects({
+            attach_mappings = function(prompt_bufnr, map)
+                actions.select_default:replace(function()
+                    local selection = action_state.get_selected_entry()
+                    actions.close(prompt_bufnr)
+
+                    if selection then
+                        vim.cmd("cd " .. selection.value)
+                        vim.notify("Switched to: " .. vim.fn.fnamemodify(selection.value, ":t"))
+                    end
+                end)
+                return true
+            end,
+        })
+    end, { desc = "Find projects" })
     vim.keymap.set("n", "<leader>ff", function()
         require("telescope.builtin").find_files()
     end, { desc = "Find files" })

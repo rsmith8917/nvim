@@ -66,4 +66,32 @@ return {
             harpoon:setup()
         end,
     },
+
+    {
+        "ahmedkhalf/project.nvim",
+        config = function()
+            require("project_nvim").setup({
+                -- Detection methods to use
+                detection_methods = { "pattern", "lsp" },
+
+                -- Patterns to detect project root
+                patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json", "go.mod", "Cargo.toml" },
+
+                -- Don't calculate root directory on specific directories
+                exclude_dirs = {},
+
+                -- Show hidden files in telescope
+                show_hidden = false,
+
+                -- When set to false, you will get a message when project.nvim changes your directory
+                silent_chdir = true,
+
+                -- Path where project.nvim will store the project history
+                datapath = vim.fn.stdpath("data"),
+            })
+
+            -- Enable telescope integration
+            require('telescope').load_extension('projects')
+        end,
+    },
 }
