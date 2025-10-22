@@ -213,6 +213,18 @@ function M.setup()
     -- MARKDOWN
     -- ========================================================================
     vim.keymap.set("n", "<leader>md", "<cmd>RenderMarkdown toggle<CR>", { desc = "Toggle markdown rendering" })
+
+    -- ========================================================================
+    -- TERMINAL
+    -- ========================================================================
+    vim.keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<CR>", { desc = "Toggle floating terminal" })
+    vim.keymap.set("n", "<leader>th", "<cmd>ToggleTerm direction=horizontal<CR>", { desc = "Toggle horizontal terminal" })
+    vim.keymap.set("n", "<leader>tv", "<cmd>ToggleTerm direction=vertical<CR>", { desc = "Toggle vertical terminal" })
+    vim.keymap.set("n", "<leader>tg", "<cmd>lua lazygit_toggle()<CR>", { desc = "Toggle LazyGit terminal" })
+    vim.keymap.set("n", "<leader>tp", "<cmd>lua python_toggle()<CR>", { desc = "Toggle Python REPL" })
+    vim.keymap.set("n", "<leader>tn", "<cmd>lua node_toggle()<CR>", { desc = "Toggle Node REPL" })
+    -- Quick toggle with Ctrl-\ (also mapped in plugin config)
+    vim.keymap.set("n", "<C-\\>", "<cmd>ToggleTerm<CR>", { desc = "Toggle terminal" })
 end
 
 return M
