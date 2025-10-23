@@ -16,6 +16,9 @@ return {
             require("neo-tree").setup({
                 close_if_last_window = true,
                 filesystem = {
+                    follow_current_file = {
+                        enabled = false,
+                    },
                     filtered_items = {
                         hide_dotfiles = false,
                         hide_gitignored = true,
@@ -71,6 +74,9 @@ return {
         "ahmedkhalf/project.nvim",
         config = function()
             require("project_nvim").setup({
+                -- Manual mode: only change directory when explicitly using Telescope, not automatically
+                manual_mode = true,
+
                 -- Detection methods to use
                 detection_methods = { "pattern", "lsp" },
 
