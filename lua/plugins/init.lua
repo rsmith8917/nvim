@@ -19,5 +19,4 @@ return {
     { import = "plugins.git" },
     { import = "plugins.coverage" },
     { import = "plugins.markdown" },
-    { import = "plugins.terminal" },
 }
