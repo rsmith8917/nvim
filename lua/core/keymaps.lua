@@ -213,6 +213,13 @@ function M.setup()
     -- MARKDOWN
     -- ========================================================================
     vim.keymap.set("n", "<leader>md", "<cmd>RenderMarkdown toggle<CR>", { desc = "Toggle markdown rendering" })
+
+    -- ========================================================================
+    -- UTILITIES
+    -- ========================================================================
+    vim.keymap.set("n", "<leader>uu", function()
+        require("utils.uuid").insert_uuid()
+    end, { desc = "Insert UUIDv7" })
 end
 
 return M
