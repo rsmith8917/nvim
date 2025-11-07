@@ -25,6 +25,31 @@ return {
                 },
             })
 
+            -- YAML with OpenAPI schema support
+            vim.lsp.config('yamlls', {
+                settings = {
+                    yaml = {
+                        schemas = {
+                            ["https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json"] = {
+                                "openapi.yaml",
+                                "openapi.yml",
+                                "**/openapi/**/*.yaml",
+                                "**/openapi/**/*.yml",
+                            },
+                            ["https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.0/schema.json"] = {
+                                "**/swagger/**/*.yaml",
+                                "**/swagger/**/*.yml",
+                            },
+                        },
+                        format = {
+                            enable = true,
+                        },
+                        validate = true,
+                        completion = true,
+                    },
+                },
+            })
+
             -- Enable all LSP servers
             vim.lsp.enable({
                 'lua_ls',
@@ -32,6 +57,7 @@ return {
                 'ts_ls',
                 'pyright',
                 'clangd',
+                'yamlls',
             })
         end,
     },

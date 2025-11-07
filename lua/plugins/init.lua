@@ -20,4 +20,5 @@ return {
     { import = "plugins.coverage" },
     { import = "plugins.markdown" },
     { import = "plugins.notebooks" },
+    { import = "plugins.openapi" },
 }

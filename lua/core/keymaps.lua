@@ -215,6 +215,13 @@ function M.setup()
     vim.keymap.set("n", "<leader>md", "<cmd>RenderMarkdown toggle<CR>", { desc = "Toggle markdown rendering" })
 
     -- ========================================================================
+    -- OPENAPI
+    -- ========================================================================
+    vim.keymap.set("n", "<leader>op", "<cmd>SwaggerPreview<CR>", { desc = "Preview OpenAPI spec" })
+    vim.keymap.set("n", "<leader>os", "<cmd>SwaggerPreviewStop<CR>", { desc = "Stop OpenAPI preview" })
+    vim.keymap.set("n", "<leader>ot", "<cmd>SwaggerPreviewToggle<CR>", { desc = "Toggle OpenAPI preview" })
+
+    -- ========================================================================
     -- UTILITIES
     -- ========================================================================
     vim.keymap.set("n", "<leader>uu", function()
