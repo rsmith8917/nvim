@@ -5,6 +5,7 @@
 return {
     {
         "catppuccin/nvim",
+        lazy = false,
         name = "catppuccin",
         priority = 1000,
         config = function()
@@ -31,82 +32,6 @@ return {
     },
 
     {
-        "EdenEast/nightfox.nvim",
-        priority = 1000,
-        config = function()
-            require("nightfox").setup({
-                options = {
-                    transparent = false,
-                    dim_inactive = false,
-                },
-            })
-        end,
-    },
-
-    {
-        "folke/tokyonight.nvim",
-        priority = 1000,
-        config = function()
-            require("tokyonight").setup({
-                style = "moon", -- storm, moon, night, day
-                transparent = false,
-                terminal_colors = true,
-            })
-        end,
-    },
-
-    {
-        "rose-pine/neovim",
-        name = "rose-pine",
-        priority = 1000,
-        config = function()
-            require("rose-pine").setup({
-                variant = "main", -- auto, main, moon, or dawn
-                dark_variant = "main",
-            })
-        end,
-    },
-
-    {
-        "rebelot/kanagawa.nvim",
-        priority = 1000,
-        config = function()
-            require("kanagawa").setup({
-                transparent = false,
-            })
-        end,
-    },
-
-    {
-        "Mofiqul/dracula.nvim",
-        priority = 1000,
-        config = function()
-            require("dracula").setup()
-        end,
-    },
-
-    {
-        "projekt0n/github-nvim-theme",
-        name = "github-theme",
-        priority = 1000,
-        config = function()
-            require("github-theme").setup({
-                options = {
-                    transparent = false,
-                    terminal_colors = true,
-                    dim_inactive = false,
-                    styles = {
-                        comments = "italic",
-                        functions = "NONE",
-                        keywords = "bold",
-                        variables = "NONE",
-                    },
-                },
-            })
-        end,
-    },
-
-    {
         "Mofiqul/vscode.nvim",
         priority = 1000,
         config = function()
@@ -124,7 +49,7 @@ return {
         dir = vim.fn.stdpath("config"),
         priority = 999,
         config = function()
-            vim.cmd.colorscheme("catppuccin-mocha")
+            vim.cmd.colorscheme("catppuccin")
         end,
     },
 }
