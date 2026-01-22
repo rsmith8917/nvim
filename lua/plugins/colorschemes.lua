@@ -4,33 +4,52 @@
 
 return {
     {
-        "jesseleite/nvim-noirbuddy",
-        dependencies = { "tjdevries/colorbuddy.nvim" },
+        "catppuccin/nvim",
         lazy = false,
+        name = "catppuccin",
         priority = 1000,
         config = function()
-            require("noirbuddy").setup({
-                -- preset = "crt-green", -- options: minimal, miami-nights, kiwi, slate, crt-green, crt-amber
-                colors = {
-                    primary = "#8fc490",
-                    diagnostic_error = "#e08080",
-                    diagnostic_info = "#80b8e0",
-                    diagnostic_warning = "#e0d580",
-                    diagnostic_hint = "#c380e0",
-                    diff_add = "#a0c4a0",
-                    diff_delete = "#c49090",
-                    diff_change = "#c4c0a0",
+            require("catppuccin").setup({
+                flavour = "mocha",
+                integrations = {
+                    treesitter = true,
+                    telescope = true,
+                    cmp = true,
+                    gitsigns = true,
+                    neotree = true,
+                    native_lsp = {
+                        enabled = true,
+                        underlines = {
+                            errors = { "undercurl" },
+                            hints = { "undercurl" },
+                            warnings = { "undercurl" },
+                            information = { "undercurl" },
+                        },
+                    },
                 },
             })
+        end,
+    },
 
-            local colorbuddy = require("colorbuddy")
-            local Group = colorbuddy.Group
-            local colors = colorbuddy.colors
-            Group.new("NeoTreeGitModified", colors.primary)
-            Group.new("NeoTreeGitAdded", colors.primary)
-            Group.new("NeoTreeGitDeleted", colors.noir_5)
-            Group.new("NeoTreeGitConflict", colors.diagnostic_error)
-            Group.new("NeoTreeGitUntracked", colors.noir_1)
+    {
+        "Mofiqul/vscode.nvim",
+        priority = 1000,
+        config = function()
+            require("vscode").setup({
+                transparent = false,
+                italic_comments = true,
+                disable_nvimtree_bg = true,
+            })
+        end,
+    },
+
+    -- Set default colorscheme (load after all theme plugins)
+    {
+        "default-colorscheme",
+        dir = vim.fn.stdpath("config"),
+        priority = 999,
+        config = function()
+            vim.cmd.colorscheme("catppuccin")
         end,
     },
 }
