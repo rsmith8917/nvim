@@ -16,7 +16,6 @@ return {
     { import = "plugins.ui" },
     { import = "plugins.navigation" },
     { import = "plugins.editing" },
-    { import = "plugins.git" },
     { import = "plugins.coverage" },
     { import = "plugins.markdown" },
     { import = "plugins.notebooks" },
